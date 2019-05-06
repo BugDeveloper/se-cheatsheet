@@ -42,14 +42,11 @@ We still need Diffie-Hellman for number of reasons:
 2. Parsel - zero configuration
 3. Rollup.js
 
+[Webpack4 configurator ](https://createapp.dev/webpack)
+
 #### Additional tools
 - Babel - translates JS code to ES5
 - Eslint - syntacs checking
-
-
-
-[Webpack4 configurator ](https://createapp.dev/webpack)
-`npm install --save-dev webpack webpack-dev-server webpack-cli`
 
 
 ### Optimisation notes
