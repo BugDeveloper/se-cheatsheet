@@ -57,8 +57,8 @@ We still need Diffie-Hellman for number of reasons:
   	- Load JS at bottom
   - CSS 
     - Media queries
-    - Above the fold loading
-    - Less specifisity
+    - Above the fold loading (load first what you see first)
+    - Less specifisity (less files, easier to build CSSOM)
   - JS
     - Load scripts async
     - Deffer scripts loading
