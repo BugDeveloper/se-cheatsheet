@@ -410,7 +410,7 @@ Numbers in a computer are represented using bits, not decimal digits so instead 
 
 E.g. 28 is stored as follows:
 
-| Sign 1 bit.    | Exponent 11 bits.     | Mantisa 52 bits   |
+| Sign 1 bits    | Exponent 11 bits      | Mantisa 52 bits   |
 | -------------- |:---------------------:| -----------------:|
 | 0              | 10000000011           | 110...00          |
 | +              | 4 = 131 - 127         | 1/2 = 1 / (2 + 4) |
