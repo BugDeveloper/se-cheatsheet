@@ -595,9 +595,10 @@ with decimal.localcontext() as ctx:
 
 ### Constructors and contexts
 
+_integer and string_
 ```
-integer Decimal(10) -> 10
-string Decimal('0.1') -> 0.1
+Decimal(10) -> 10
+Decimal('0.1') -> 0.1
 ```
 
 _tuples_
@@ -608,6 +609,7 @@ IEEE format Decimal(s, (d1, d2, d3, ...), exp)
 
 
 _floats?_ Yes, but this lead to potencial problems
+
 `Decimal(0.1) -> 0.100000000000000005551`
 
 #### Context Precision
@@ -625,3 +627,4 @@ a = Decimal('0.12345') a -> 0.12345
 b = Decimal('0.12345') b -> 0.12345
 c = a + b # a + b = 0.2469 c -> 0.25
 ```
+
