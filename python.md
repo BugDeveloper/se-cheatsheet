@@ -14,7 +14,7 @@
 
 # Short notes
 
-### Getters and setters
+## Getters and setters
 
 In python by implementing gettes and setters you don't break backward compatability (unlike java), so you you shouldn't do it unless you have a specific reason and logic to put there.
 
@@ -408,7 +408,7 @@ significant digits -> 52 bits -> 15-17 significant digits
 
 Numbers in a computer are represented using bits, not decimal digits so instead of powers of 10 we use powers of 2.
 
-E.g. 28 is stored as follows:
+E.g. 28.0 float is stored as follows:
 
 | Sign 1 bits    | Exponent 11 bits      | Mantisa 52 bits   |
 | -------------- |:---------------------:| -----------------:|
@@ -593,3 +593,35 @@ with decimal.localcontext() as ctx:
    //will use the ctx context
 ```
 
+### Constructors and contexts
+
+```
+integer Decimal(10) -> 10
+string Decimal('0.1') -> 0.1
+```
+
+_tuples_
+```
+Decimal(1, (3, 1, 4, 1, 5), -4) -> -3.1415
+IEEE format Decimal(s, (d1, d2, d3, ...), exp)
+```
+
+
+_floats?_ Yes, but this lead to potencial problems
+`Decimal(0.1) -> 0.100000000000000005551`
+
+#### Context Precision
+
+- Context precision affects mathematical operations
+- Context precision does not affect the constructor
+
+```
+import decimal
+from decimal import Decimal
+
+decimal.getcontext().prec = 2
+
+a = Decimal('0.12345') a -> 0.12345
+b = Decimal('0.12345') b -> 0.12345
+c = a + b # a + b = 0.2469 c -> 0.25
+```
