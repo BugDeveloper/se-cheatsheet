@@ -628,3 +628,125 @@ b = Decimal('0.12345') b -> 0.12345
 c = a + b # a + b = 0.2469 c -> 0.25
 ```
 
+### Mathematical operations
+
+For integers `//` operator performs floor division.
+
+For Decimals however, it performs truncated division.
+
+
+We _can_ use the math module, but Decimal objects will first be cast to floats - so we lose the whole precision mechanism that made us use Decimal objects in the first place!
+
+> So it's good idea to use mathimatical functions defined in Decimal class instead of other ones.
+
+### Perfomance
+
+Decimal vs float comparison
+
+- not as easy to code: construction via strings or tuples
+- not all mathematical functions that exist in the math module have a Decimal counterpart
+- more memory overhead
+- performance: much slower than floats (relatively)
+
+## Booleans
+
+Python has a concrete bool class that is used to represent Boolean values. However, the bool class is a subclass of the int class
+
+`issubclass(bool, int) # -> True`
+
+Two constants are defined: `True` and `False`. It is _singleton_ objects of type bool.
+
+### is vs ==
+
+Because True and False are singleton objects, they will always retain their same memory address throughout the lifetime of your application.
+
+So comparison of any Boolean expression to `True` of `False` can be performed using either the `is` or the `==` operator.
+
+`True` is actually stored as `1` in memory and `False` as `0`.
+
+But `True` and `1` are different objects in memory.
+
+`True is 1` -> False
+
+### Booleans as Integers
+
+```
+True > False # -> True
+(1 == 2) == False # -> True
+(1 == 2) == 0 # -> True
+True + True + True # -> 3
+-True # -> -1
+100 * False # -> 0
+```
+
+### The Boolean constructor
+
+The Boolean constructor `bool(x)` returns `True` when x is `True` and `False` overwise.
+
+`bool(-100)` -> True
+
+Many classes itself contain a definition of how to cast instances of them to a Boolean.
+
+### Objects Truth Values
+
+Every object has a `True` truth value, except:
+- `None`
+- `False`
+- `0` in any numeric type
+- empty sequesnces
+- empty mappings
+- classes which implemented `__bool__` or `__len__` method returns `False` or `0`
+
+### Under the hood
+
+When we call `bool(x)` python actially executes `x.__bool__()` or `x.__len__()` if `__bool__` is not defined. If neither is defined, then `True`.
+
+### Operator Precedence
+
+| From highest to lowest |
+| ---------------------- |
+| < > <= >= == != in is  |
+| not                    |
+| and                    |
+| or                     |
+
+### Boolean operators
+
+- `X or Y` - if `X` is _truthy_, returns `X`, otherwise returns `Y`
+- `X and Y` - if `X` is _falsy_, returns `X`, otherwise returns `Y`
+
+#### Or
+
+There is always a possibility to avoid multiple if checks by getting _truthy_ args when needed.
+
+`a = s1 or s2 or s3 or 'default'`
+
+`a` is equal to the first _truthy_ value from left to right. This also shows ability to have default value in any bool equasion.
+
+#### And
+
+
+##### Zero division
+
+`x = a and total / a`
+
+In case of zero division the result will be equal to 0.
+
+##### Average
+
+`avg = n and sum / n`
+
+##### First string character
+You want to return the first character of a string s, or an empty string if the string is None or empty
+
+`return (s and s[0]) or ''`
+
+### Comparison operators
+
+#### Chained comparisons
+
+`a == b == c` -> `a == b and b == c`
+
+`a < b < c` -> `a < b and b < c`
+
+`a < b < c < d` -> `a < b and b < c and c < d`
