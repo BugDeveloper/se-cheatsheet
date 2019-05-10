@@ -153,14 +153,14 @@ def process(lst):
 
 my_list = [1, 2, 3]
 process(my_list)
-print(my_list) # -> [1, 2, 3, 100]
+print(my_list) # [1, 2, 3, 100]
 ```
 
 ```
 a = [1, 2, 3]
 b = a
 b.append(4)
-print(b) # -> [1, 2, 3, 4]
+print(b) # [1, 2, 3, 4]
 ```
 
 
@@ -176,7 +176,7 @@ print(b) # -> [1, 2, 3, 4]
 a = None
 b = None
 
-a is b # -> True
+a is b # True
 ```
 
 
@@ -231,7 +231,7 @@ import sys
 a = sys.intern('the quick brown fox')
 b = sys.intern('the quick brown fox')
 
-a is b # -> True
+a is b # True
 ```
 
 #### Why?
@@ -293,22 +293,22 @@ The int class provides multiple constructors
 ```
 int(10)
 int(-10)
-int(10.9) # -> truncation: 10
-int(-10.9) # -> truncation: 10.9
-int(True) # -> 1
-int(Decimal('10.9')) # -> truncation: 10
-int('10') # -> a == 10
+int(10.9) # truncation: 10
+int(-10.9) # truncation: 10.9
+int(True) # 1
+int(Decimal('10.9')) # truncation: 10
+int('10') # a == 10
 ```
 #### Number base
 
 ```
-int('1010', 2) # -> 10
-int('A12F', base=16) # -> 41263
-int('a12f', base=16) # -> 41263
-int('1010', base=2) # -> 10
-int('534', base=8) -> 348
-int('A', base=11) -> 10
-int('B', 11) # -> ValueError: invalid literal for int() with base 11: 'B'
+int('1010', 2) # 10
+int('A12F', base=16) # 41263
+int('a12f', base=16) # 41263
+int('1010', base=2) # 10
+int('534', base=8) # 348
+int('A', base=11) # 10
+int('B', 11) # ValueError: invalid literal for int() with base 11: 'B'
 ```
 
 #### Reverse Process: changing an integer from base 10 to another base
@@ -316,9 +316,9 @@ int('B', 11) # -> ValueError: invalid literal for int() with base 11: 'B'
 built-in functions
 
 ```
-bin(10) # -> '0b1010'
-oct(10) # -> '0o12'
-hex(10) # -> 0xa
+bin(10) # '0b1010'
+oct(10) # '0o12'
+hex(10) # 0xa
 ```
 
 The prefixes in the strings help document the base of the number.
@@ -353,7 +353,7 @@ This algorithm returns a list of the digits in the specified base b (a represent
 ```
 map = '0123456789ABC'
 digits = [4, 11, 3, 12]
-encoding = ''.join([map[d] for d in digits]) # -> '4B3C'
+encoding = ''.join([map[d] for d in digits]) # '4B3C'
 ```
 
 ## Rational numbers
@@ -367,8 +367,8 @@ y = Fraction(22, 7)
 z = Fraction(6, 10)
 ```
 
-- Fraction are automatically reduced: `Fraction(6, 10) # -> Fraction(3, 5)`
-- Negative sign, if any, is always attached to the numerator: `Fraction(1, -4) # -> Fraction(-1, 4)`
+- Fraction are automatically reduced: `Fraction(6, 10) # Fraction(3, 5)`
+- Negative sign, if any, is always attached to the numerator: `Fraction(1, -4) # Fraction(-1, 4)`
 
 ### Constructors
 
@@ -381,18 +381,18 @@ Fraction(string)
 ```
 
 ```
-Fraction('10') # -> Fraction(10, 1)
-Fraction('0.125') # -> Fraction(1, 8)
-Fraction('22/7') # -> Fraction(22, 7)
+Fraction('10') # Fraction(10, 1)
+Fraction('0.125') # Fraction(1, 8)
+Fraction('22/7') # Fraction(22, 7)
 ```
 
 ### Constraining the denominator
 
-`x = Fraction(math.pi) # -> Fraction(884279719003555, 281474976710656)`
+`x = Fraction(math.pi) # Fraction(884279719003555, 281474976710656)`
 
 We can use `limit_denominator(max_denominator=1000000)` instance method i.e. to find the closest rational with a denominator that does not exceed max_denominator.
 
-`x.limit_denominator(10) # -> Fraction(22, 7)`
+`x.limit_denominator(10) # Fraction(22, 7)`
 
 ## Floats
 
@@ -426,20 +426,20 @@ So, some numbers that do have a finite decimal representation, do not have a fin
 
 ```
 x = 0.1 + 0.1 + 0.1
-format(x, '.25f') # -> 0.3000000000000000444089210
+format(x, '.25f') # 0.3000000000000000444089210
 
 y = 0.3
-format(y, '.25f') # -> 0.2999999999999999888977698
+format(y, '.25f') # 0.2999999999999999888977698
 
-x == y # -> False
+x == y # False
 ```
 
 Using roundings will not necessarilly solve the problem either.
-`round(0.1, 1) + round(0.1, 1) + round(0.1, 1) == round(0.3, 1) # -> False`
+`round(0.1, 1) + round(0.1, 1) + round(0.1, 1) == round(0.3, 1) # False`
 
 But it can be used to round the entirety of both sides of the equality comparison.
 
-`round(0.1 + 0.1 + 0.1, 5) == round(0.3, 5) # -> True`
+`round(0.1 + 0.1 + 0.1, 5) == round(0.3, 5) # True`
 
 
 To test for "equality" of two different floats, you could do the following methods:
@@ -463,8 +463,8 @@ xy_tol = rel_tol * max(|x|, |y|)
 ab_tol = rel_tol * max(|a|, |b|)
 
 
-is_equal(x, y, xy_tol) # -> True
-is_equal(a, b, ab_tol) # -> True
+is_equal(x, y, xy_tol) # True
+is_equal(a, b, ab_tol) # True
 ```
 
 #### Combination of relative and ubsolute tolerance
@@ -495,8 +495,8 @@ Python int constructor uses truncation when get float as an argument.
 `math.floor(float)` - always returns lower int value
 
 ```
-math.floor(10.6) # -> 10
-math.floor(-10.3) # -> -11
+math.floor(10.6) # 10
+math.floor(-10.3) # -11
 ```
 
 `a // b == floor(a / b)` - floor division
@@ -505,8 +505,8 @@ math.floor(-10.3) # -> -11
 `math.ceil(float)` - always returns greater int value
 
 ```
-math.ceil(10.3) # -> 11
-math.ceil(-10.6) # -> -10
+math.ceil(10.3) # 11
+math.ceil(-10.6) # -10
 ```
 
 ### Rounding
@@ -652,7 +652,7 @@ Decimal vs float comparison
 
 Python has a concrete bool class that is used to represent Boolean values. However, the bool class is a subclass of the int class
 
-`issubclass(bool, int) # -> True`
+`issubclass(bool, int) # True`
 
 Two constants are defined: `True` and `False`. It is _singleton_ objects of type bool.
 
@@ -671,12 +671,12 @@ But `True` and `1` are different objects in memory.
 ### Booleans as Integers
 
 ```
-True > False # -> True
-(1 == 2) == False # -> True
-(1 == 2) == 0 # -> True
-True + True + True # -> 3
--True # -> -1
-100 * False # -> 0
+True > False # True
+(1 == 2) == False # True
+(1 == 2) == 0 # True
+True + True + True # 3
+-True # -1
+100 * False # 0
 ```
 
 ### The Boolean constructor
@@ -750,3 +750,4 @@ You want to return the first character of a string s, or an empty string if the 
 `a < b < c` -> `a < b and b < c`
 
 `a < b < c < d` -> `a < b and b < c and c < d`
+
