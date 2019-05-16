@@ -93,7 +93,78 @@ for i, j in [(1, 2), (3, 4), (5, 6)]:
 5 6
 ```
 
----
+## Unpacking Iterables
+
+Swapping values:
+
+`a, b = b, a`
+
+`a, b, c = [1, 2, 'Hello']` -> a = 10, b = 20, c = 'hello'
+`a, b, c = 'XYZ'` -> a = 'X', b = 'Y', c = 'Z'
+
+### The `*` unpacking operator
+
+Unpacking iterable values
+
+```
+l = [1, 2, 3, 4, 5, 6]
+
+a0, b0 = l[0], l[1:]
+
+a1, *b1 = l
+
+a0 == a1 # True
+b0 == b1 # True
+```
+
+```
+l1 = [1, 2, 3]
+l2 - 'XYZ'
+l = [*l1, *l2] # l = [1, 2, 3, 'X', 'Y', 'Z']
+```
+
+```
+d1 = {'p': 1, 'y': 2, 't': 3}
+d2 = {'t': 4, 'h': 5, 'o': 6, 'n': 7}
+
+l = [*d1, *d2] #['p', 'y', 't', 't', 'h', 'o', 'n'] order is not guaranteed 
+s = {*d1, *d2} #{'p', 'y', 't', 'h', 'o', 'n'} order is not guaranteed
+```
+
+### The `**` unpacking operator
+
+Unpacking key-value pairs
+
+```
+d1 = {'p': 1, 'y': 2, 't': 3}
+d2 = {'t': 4, 'h': 5, 'o': 6, 'n': 7}
+
+d = {**d1, **d2} #{'p': 1, 'y': 2, 't': 4, 'h': 5, 'o': 6, 'n': 7} order is not guaranteed
+```
+
+Note that the value of 't' in d2 "overwrote" the first value of 't' found in d1
+
+### Nested Unpacking
+
+```
+l = [1, 2, [3, 4]]
+
+a, b, (c, d) = l
+
+# a = 1, b = 2, c = 3, d = 4
+```
+
+```
+a, *b, (c, d, e) = [1, 2, 3, 'XYZ']
+
+# a = 1, b = [2, 3], (c, d, e) = 'XYZ' -> c = 'X', d = 'Y', e = 'Z'
+```
+
+```
+a, *b, (c, *d) = [1, 2, 3, 'python']
+# a = 1, b = [2, 3], (c, *d) = 'python' -> c = 'p', d = ['y', 't', 'h', 'o', 'n']
+```
+
 
 # Variables and Memory
 
@@ -725,7 +796,6 @@ There is always a possibility to avoid multiple if checks by getting _truthy_ ar
 
 #### And
 
-
 ##### Zero division
 
 `x = a and total / a`
@@ -751,3 +821,113 @@ You want to return the first character of a string s, or an empty string if the 
 
 `a < b < c < d` -> `a < b and b < c and c < d`
 
+# Function parameters
+
+## `*args`
+
+`a, b, *c = 10, 20, 'a', 'b' # a = 10, b = 20, c = ['a', 'b']`
+
+Something similar happens when positional arguments are passed to a function:
+
+```
+def func1(a, b, *c):
+	pass
+
+func1(10, 20, 'a', 'b') # a = 10, b = 20, c = ('a', 'b')
+```
+
+### Unpacking arguments
+
+```
+def func1(a, b, c):
+	pass
+l = [10, 20, 30]
+
+func1(l) $ throws exception
+
+func(*l) # a = 10, b = 20, c = 30
+```
+
+## Keyword arguments
+
+```
+def func(a, b, *args, d):
+	pass
+```
+
+In this case, `*args` effectively exhausts all positional arguments
+and `d` must be passed as a keyword (named) argument.
+
+In fact we can force no positional arguments at all:
+
+```
+def func(*, d):
+	pass
+```
+
+`*` indicates the "end" of positional arguments
+
+## `**kwargs`
+
+```
+def func(*, d, **kwargs):
+	pass
+
+func(d=1, a=2, b=3) # d = 1, kwargs = {'a': 2, 'b': 3}
+
+func(d=1) # d = 1, kwargs = {}
+```
+
+## Sum up
+
+Arguments:
+
+- `a, b, c=10` - positional parameters can have default values non-defaulted params are mandatory args user may specify them using keywords
+- `*args` - scoops up any additional positional args
+- `*` - indicates no more positional args
+- `kw1, kw2=100` - specific keyword-only args can have default values non-defaulted params are mandatory args user must specify them using keywords
+if used, `*` or `*args` must also be used
+- `**kwargs` - scoops up any additional keyword args
+
+
+## Beware default values
+
+### What happens at run-time... 
+
+When a module is loaded all code is executed immediately
+
+```
+def func(a=10):
+	print(a) 
+func()
+```
+- `def func(a=10):` the function object is created, and func references it
+- `print(a)` the integer object 10 is evaluated/created and is assigned as the default for a
+- `func()` the function is executed
+
+### So what?
+
+```
+from datetime import datetime
+
+def log(msg, *, dt=datetime.utcnow()):
+   print('{0}: {1}'.format(dt, msg)
+```
+
+```
+log('message 1') # 2017-08-21 20:54:37.706994 : message 1
+log('message 2') # 2017-08-21 20:54:37.706994 : message 2
+```
+
+### Solution
+
+We set a default for `dt` to `None`. Inside the function, we test to see if `dt` is still `None` if `dt` is `None`, set it to the current date/time otherwise, use what the caller specified for `dt`
+
+```
+from datetime import datetime
+def log(msg, *, dt=None):
+    dt = dt or datetime.utcnow()
+    print('{0}: {1}'.format(dt, msg)
+```
+
+In general, always beware of using a mutable object (or a callable) for an argument default
