@@ -251,7 +251,7 @@ a is b # True
 ```
 
 
-### Everything is an object
+## Everything is an object
 - Operators (+, -, ==, is, ...)
 - Functions (function)
 - Classes (class)
