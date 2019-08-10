@@ -930,4 +930,746 @@ def log(msg, *, dt=None):
     print('{0}: {1}'.format(dt, msg)
 ```
 
-In general, always beware of using a mutable object (or a callable) for an argument default
+In general, always beware of using a mutable object (or a callable) for an argument default.
+
+# First-class functions
+
+## Docstrings and annotations
+
+### Docstings
+
+```
+def fact(n):
+   """Calculates n! (factorial function)
+    Inputs:
+        n: non-negative integer
+Returns:
+the factorial of n
+        """
+   ...
+```
+
+Docstrings are stored in the `__doc__` property.
+
+```
+help(fact)
+
+# Output:
+#	 fact(n)
+#		 Calculates n! (factorial function)
+#		 Inputs:
+#			n: non-negative integer
+#		 Returns:
+#			the factorial of n
+```
+
+### Function Annotations
+
+Additional documenting way, stored in __annotations__ property as dictionary.
+
+```
+def my_func(a: <expression>, b: <expression>) -> <expression>:
+	pass
+```
+
+```
+def my_func(a: 'a string', b: 'a positive integer') -> 'a string':
+	return a * b
+
+help(my_func) 
+
+# Output:
+	# my_func(a: 'a string', b: 'a positive integer') -> 'a string'
+```
+
+Annotations can be any expression
+
+```
+def my_func(a: str, b: [1, 2, 3]) -> str:
+	return a*b
+```
+
+## Lambda Expressions
+
+Actually are usual functions but without name
+
+```
+lambda x: return x ** 2
+lambda x, y: x + y
+lambda : 'hello'
+lambda s: s[::-1].upper()
+```
+
+```
+lambda s: s[::-1].upper() # function
+```
+
+Lambda is NOT equvalent to closure.
+
+```
+my_func = lambda x: x**2
+
+# Identical to 
+
+def my_func(x):
+   return x**2
+```
+
+Lambda's body is limited to a single expression
+
+## Function Introspection
+
+### `dir()` function
+
+dir() is a built-in function that, given an object as an argument, will return a list of valid
+attributes for that object
+
+### Function Attributes: `__name__`, `__defaults__`, `__kwdefaults__`
+
+- `__name__` - name of function
+- `__defaults__` - tuple containing positional parameter defaults 
+- `__kwdefaults__` - dictionary containing keyword-only parameter defaults
+
+
+```
+def my_func(a, b=2, c=3, *, kw1, kw2=2):
+    pass
+
+my_func.__name__ # my_func
+my_func.__defaults__ # (2, 3)
+my_func.__kwdefaults__ # {'kw2': 2}
+```
+
+### Function Attribute: `__code__`
+
+
+```
+def my_func(a, b=1, *args, **kwargs):
+   i = 10
+   b = min(i, b)
+   return a * b
+
+my_func.__code__ # <code object my_func at 0x00020EEF ... >
+```
+
+This `__code__` object itself has various properties, which include:
+
+- `co_varnames` - parameter and local variables
+
+```
+my_func.__code__.co_varnames # ('a', 'b', 'args', 'kwargs', 'i') 
+#parameter names first, followed by local variable names
+```
+
+- `co_argcount` - number of parameters, does not count \*args and \*\*kwargs!
+
+```
+my_func.__code__.co_argcount # 2 
+```
+
+### The `inspect` Module
+
+```
+from inspect import *
+
+ismethod(obj)
+isfunction(obj)
+isroutine(obj)
+
+inspect.getsource(func)
+inspect.getmodule(func)
+inspect.getcomments(func)
+
+# ...and much more
+```
+
+#### Callable Signatures
+
+`inspect.signature(my_func)` - returns `Signature` instance
+
+`Signature` contains attribute `paramaters`. A `dict` where `keys` are parameter names and `values` with such parameters as `name`, `default`, `annotation`, `kind`.
+
+## Callables
+
+Everything what can be called with `()` operator.
+
+```
+callable(print) # True
+callable(10) # False
+```
+
+Instance is callable if it implements `__call__` method.
+
+## Map, filter, zip
+
+Higher order function - func that takes another func as parameter and/or returns a func.
+
+### The `map` function
+
+`map(func, *iterables)`
+
+`*iterables ` - a variable number of iterable objects
+
+`func` - some function that takes as many arguments as there are iterable objects passed to `iterables`
+
+
+`map` returns an `iterator` that calculates the function appliend to each element of the iterables.
+
+#### Examples
+
+```
+l = [2, 3, 4]
+
+list(map(lambda x: x**2, l)) # [4, 9, 16]
+```
+
+```
+l1 = [1, 2, 3]
+l2 = [10, 20, 30]
+
+list(map(lambda x, y: x + y, l1, l2)) # [11, 22, 33]
+```
+
+### The `filter` function
+
+`filter(func, iterable)`
+
+`iterable` - a single iterable
+`func` - some func that takes a single argument
+
+`filter` - returns an `iterator` that contains all the elements of the iterable for which the function called on it is Truthy
+
+If the function is `None`, it simply returns the elements of `iterable` that are Truthy.
+
+#### Examples
+
+```
+l = [0, 1, 2, 3, 4]
+list(filter(lambda n: n % 2 == 0, l)) # [0, 2, 4]
+```
+
+### The `zip` function
+
+`zip(*iterables)`
+
+```
+zip(
+	[1, 2, 3],
+	[10, 20, 30],
+	['a', 'b', 'c']
+)
+
+# (1, 10, 'a'), (2, 20, 'b'), (3, 30, 'c')
+```
+
+If lengths of iterables are not equal, than the length of the result will be equal to the length of the shorter iterable
+```
+l1 = range(100)
+l2 = 'abcd'
+list(zip(l1, l2))
+
+# [(0, 'a'), (1, 'b'), (2, 'c'), (3, 'd')]
+```
+
+### List Comprehension
+
+`[<expression1> for <varname> in <iterable> if <expression2>]`
+
+`[x for x in l if x % 2 == 0]`
+
+```
+l1 = [1, 2, 3]
+l2 = [10, 20, 30]
+```
+
+## Reducing functions
+
+These are functions that recombine an iterable recursively, ending up with a single return value.
+
+### Example
+
+#### Finding the maximum value in an iterable
+
+```
+l = [5, 8, 6, 10, 9]
+
+max_value = lambda a, b: a if a > b else b
+
+def max_sequence(sequence):
+   result = sequence[0]
+   for e in sequence[1:]:
+       result = max_value(result, e)
+   return result
+```
+
+#### Finding the minimum
+
+```
+l = [5, 8, 6, 10, 9]
+
+min_value = lambda a, b: a if a < b else b
+
+def min_sequence(sequence): result = sequence[0]
+for e in sequence[1:]:
+       result = min_value(result, e)
+   return result
+```
+
+### The `reduce` function
+
+In fact we could write
+
+```
+def _reduce(fn, sequence):
+   result = sequence[0]
+   for x in sequence[1:]:
+
+result = fn(result, x) return result
+```
+
+```
+_reduce(lambda a, b: a if a > b else b, l) # maximum 
+_reduce(lambda a, b: a if a < b else b, l) # minimum
+```
+
+### The `functools` module
+
+Python implements a `reduce` function that will handle any iterable, but works similarly to what we just saw
+
+```
+from functools import reduce
+l = [5, 8, 6, 10, 9]
+
+reduce(lambda a, b: a if a > b else b, l) # max 10
+reduce(lambda a, b: a if a < b else b, l) # min 5
+reduce(lambda a, b: a + b, l) # sum 38
+```
+
+#### Built-in Reducing Functions
+
+- `min`
+- `max`
+- `sum`
+- `any` - True if any item is True
+- `all` - True if all items is True
+
+#### The `reduce` initializer
+
+The reduce function has a third (optional) parameter: `initializer`. If it is specified, it is essentially like adding it to the front of the iterable. It is often used to provide some kind of default in case the iterable is empty.
+
+```
+l = []
+
+reduce(lambda x, y: x + y, l) # exception
+reduce(lambda x, y: x + y, l, 1) # 1
+
+l = [1, 2, 3]
+reduce(lambda x, y: x + y, l, 100) # 106
+
+```
+
+## Partial functions
+
+```
+def my_func(a, b, c):
+   print(a, b, c)
+
+def fn(b, c):
+   return my_func(10, b, c)
+
+f = lambda b, c: my_func(10, b, c)
+
+fn(20, 30) # 10, 20, 30
+f(20, 30) # 10, 20, 30
+```
+
+### Better way
+```
+from functools import partial
+f = partial(my_func, 10) 
+
+f(20, 30) # 10, 20, 30
+```
+
+#### Handling more complex arguments
+
+```
+def my_func(a, b, *args, k1, k2, **kwargs):
+   print(a, b, args, k1, k2, kwargs)
+
+f = partial(my_func, 10, k1='a')
+
+def pow(base, exponent):
+   return base ** exponent
+
+square = partial(pow, exponent=2)
+cube = partial(pow, exponent=3)
+```
+
+## The `operator` module
+
+### Arithmetic Functions
+
+- `add(a, b)`
+- `mul(a, b)`
+- `pow(a, b)`
+- `mod(a, b)`
+- `floordiv(a, b)`
+- `neg(a)`
+
+### Comparison and Boolean Operators
+- `lt(a, b)`
+- `le(a, b)`
+- `is_(a, b)`
+- `gt(a, b)`
+- `ge(a, b)`
+- `is_not(a, b)`
+- `eq(a, b)`
+- `ne(a, b)`
+- `and_(a, b)`
+- `or_(a, b)`
+- `not_(a, b)`
+
+### Sequence/Mapping Operators
+
+- `concat(s1, s2)`
+- `contains(s, val)` 
+- `countOf(s, val)` 
+- `getitem(s, i)` 
+- `setitem(s, i, val)` 
+- `delitem(s, i)`
+
+### Item Getters
+
+The `itemgetter` function returns a callable
+
+`getitem(s, i)` takes two parameters, and returns a value: `s[i]`
+
+`itemgetter(i)` returns a callable which takes one parameter: a sequence object
+
+```
+f = itemgetter(1, 3)
+
+f([1, 2, 3, 4]) # (2, 4)
+
+f('python') # ('y', 'h')
+```
+
+### Attribute Getters
+
+The `attrgetter` function is similar to `itemgetter`, but is used to retrieve object attributes.
+
+```
+my_obj = MyClass()
+my_obj.a # 10
+my_obj.b # 20
+
+
+f = attrgetter('a', 'c')
+
+f(my_obj) # (10, 30)
+```
+
+## Global and local scopes
+
+### The Global Scope
+
+The global scope is essentially the module scope. It spans a single file only. There is no concept of a truly global (across all the modules in our entire app) scope in Python.
+
+The only exception to this are some of the built-in globally available objects, such as:
+
+- `True`
+- `False`
+- `None`
+- `dict`
+- `print`
+
+Scopes include each other from top to bottom:
+
+- `Built-in`
+- `Module`
+- `Local`
+- `Local nested scope`
+- ...
+
+```
+# example.py
+
+a = 10
+def func() {
+	print(a)
+}
+```
+
+Python always looking for a variables from bottom to top. If we will call `func` from the `example.py` Python will look for `print` and `a` in following order:
+
+ 1. Looking in `local` scope (scope of the function).
+ 2. Looking in `module` scope (scope of the `example.py`) and find `a`.
+ 3. Looking in `built-it` scope and find `print`.
+
+### The Local Scope
+
+Variables defined inside a function are not created until the function is **called**. Every time the function is called, a new scope is **created**.
+
+### The `global` keyword
+
+```
+a = 0
+
+def my_func():
+	a = 100
+
+my_func() # 100
+print(a) # 0
+```
+
+```
+a = 0
+
+def my_func():
+   global a
+   a = 100
+
+my_func()
+
+print(a) # 100
+```
+
+### Global and Local Scoping
+
+When Python encounters a function definition at **compile-time** it will **scan** for any labels (variables) that have values **assigned** to them (anywhere in the function) if the label has not been specified as global, then it will be local.
+
+## Nonlocal Scopes
+
+```
+def outer_func():
+   	# some code
+	def inner_func():
+ 		# some code
+   inner_func()
+
+outer_func()
+```
+
+The inner function has access to its **enclosing** scope – the scope of the outer function. That scope is neither local (to inner_func) nor global – it is called a **nonlocal** scope.
+
+### The `nonlocal` keyword
+
+```
+def outer_func():
+   x = 'hello'
+   def inner_func():
+       x = 'python'
+	inner_func()
+	print(x)
+
+outer_func()
+```
+
+```
+def outer_func():
+   x = 'hello'
+   def inner_func():
+       nonlocal x
+       x = 'python'
+   	inner_func()
+	print(x)
+
+outer_func()
+```
+
+Whenever Python is told that a variable is `nonlocal` it will look for it in the enclosing local scopes chain until it **first** encounters the specified variable name.
+
+**Beware:** It will only look in local scopes, it will not look in the global scope.
+
+## Closures
+
+```
+def outer():
+x = 'python'
+   def inner():
+       print("{0} rocks!".format(x))
+   return inner
+
+fn = outer()
+
+fn() # python rocks!
+```
+
+When we return `inner` in the example above, we actually returning the **closure**. Not only the function by itself by also the scope.
+
+When we called `fn` at that time Python determined the value of `x` in the extended scope. But notice that `outer` had finished running before we called `fn` – it's scope was "gone".
+
+```
+def outer():
+x = 'python'
+   def inner():
+       print(x)
+return inner
+```
+
+In the code above the value of x is shared between two scopes:
+ - outer
+ - closure
+
+### Python Cells and Multi-Scoped Variables
+
+The label x is in two different scopes but always reference the same "value". `x` in this case called **a free variable**.
+
+Python does this by creating a **cell** as an intermediary object. Both variables `outer.x` and `inner.x` reference to **cell* and **cell** reference to the actual value.
+
+```
+def outer():
+    a = 100
+    x = 'python'
+    def inner():
+		a = 10 # local variable
+		print("{0} rocks!".format(x)) return inner
+
+fn = outer()
+
+fn.__code__.co_freevars # ('x', )
+fn.__closure__ # (<cell at 0xA500: str object at 0xFF100>, )
+```
+
+```
+def outer():
+	x = 'python'
+    print(hex(id(x)) # 0xFF100
+    def inner():
+       print(hex(id(x)) # 0xFF100
+       print("{0} rocks!".format(x))
+    return inner
+fn = outer()
+fn()
+```
+
+### Multiple Instances of Closures
+
+Every time we run a function, a new scope is created. If that function generates a closure, a new closure is created every time as well.
+
+```
+def counter():
+	closure count = 0
+	def inc():
+		nonlocal count
+		count += 1 
+		return count
+	return inc
+
+f1 = counter()
+f2 = counter()
+
+f1() # 1
+f1() # 2
+f1() # 3
+
+f2() # 1
+```
+
+### Shared Extended Scopes
+```
+def outer():
+   count = 0
+   def inc1():
+       nonlocal count
+       count += 1
+       return count
+	def inc2():
+		nonlocal count
+		count += 1
+		return count
+   return inc1, inc2
+
+f1, f2 = outer()
+
+f1() # 1
+f2() # 2
+```
+
+## Decorators
+```
+def counter(fn):
+   count = 0
+   def inner(*args, **kwargs):
+		nonlocal count
+		count += 1
+		print('Function {0} was called {1} times'.format(fn.__name__, count) return fn(*args, **kwargs)
+    return inner
+
+def add(a, b=0):
+	return a + b
+```
+
+```
+@counter
+def add(a, b):
+	return a + b
+```
+
+is the same as writing
+
+```
+add = counter(add)
+```
+
+```
+result = add(1, 2) # will print "Function add was called 1 times"
+result == 3 # True
+```
+
+`add.__name__ # inner`
+
+`mult`'s name "changed" when we decorated it they are not the same function after all. We also lost all metadata.
+
+### The `functools.wraps` function
+
+The functools module has a wraps function that we can use to fix the metadata of our inner function in our decorator.
+
+In fact, the `wraps` function is itself a decorator but it needs to know what was our "original" function – in this case `fn`.
+
+```
+from functools import wraps
+
+def counter(fn):
+	count = 0
+	@wraps(fn)
+	def inner(*args, **kwargs):
+		nonlocal count
+		count += 1
+		print(count)
+       	return fn(*args, **kwargs)
+   	return inner
+```
+
+### Decorator Factories
+
+If we want to tweak some variable of decorator without changing its source, we need to create a factory for decorator. E.g. if we want to measure func perfomance for N times.
+
+```
+def timed(n):
+  def dec(fn):
+    from time import perf_counter
+
+    @wraps(fn)
+    def inner(*args, **kwargs):
+        total_elapsed = 0
+        for i in range(n):
+			start = perf_counter()
+			result = fn(*args, **kwargs)
+			total_elapsed += (perf_counter() - start)
+		avg_elapsed = total_elapsed / n
+        print(avg_elapsed)
+        return result
+
+    return inner
+return dec
+```
+
+```
+@timed(10)
+def my_func():
+	...
+```
+
+## Tuples and Named Tuples

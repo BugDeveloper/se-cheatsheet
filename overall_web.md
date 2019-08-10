@@ -64,6 +64,7 @@ We still need Diffie-Hellman for number of reasons:
     - Deffer scripts loading
     - Minimize DOM manipulation
     - Avoid long running JS
+    - Avoid re-render cycles
 
 2. Delivery
   - Image compression
@@ -73,4 +74,6 @@ We still need Diffie-Hellman for number of reasons:
   - Code splitting
 3. Back-end
   - HTTP/2
+
+
 
