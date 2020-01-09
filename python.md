@@ -1672,4 +1672,110 @@ def my_func():
 	...
 ```
 
-## Tuples and Named Tuples
+## Tuples as data structures
+
+### Tuples vs lists:
+Sequences can be:
+- Homogeneous (all items are the same type)
+- Heterogeneous (items of different type)
+
+### Immutability of Tuples
+
+- Elements cannot be added or removed the order of 
+- Elements cannot be changed
+
+Works well for representing data structures:
+```
+point = (10, 20)
+circle = (0, 0, 10)
+city = ('London', 'UK', 8_780_000)
+```
+
+Can be unpacked:
+```
+city_name, country, population = city
+```
+
+**The position of the data has meaning**
+
+### Dummy Variables
+
+```
+city, _, population = ('Beijing', 'China', 21_000_000)
+```
+
+By convention, we use the `_` (*underscore*) to indicate this is a variable we don't care about.
+
+It's also used in extended unpacking too (`*_`):
+
+```
+record = ('DJIA', 2018, 1, 19, 25987.35, 26071.72, 25942.83, 26071.72)
+symbol, year, month, day, *_, close = record
+```
+## Named Tuples
+
+They subclass tuple, and add a layer to assign property names to the positional elements
+
+`from collections import namedtuple`
+
+`namedtuple` is a *class factory*
+
+```
+class_name = 'Point2D'
+field_names = ['x', 'y']
+
+Point2D = namedtuple(class_name, field_names)
+pt = Point2D(10, 20)
+```
+
+Ways of providing the list of field names to the namedtuple function:
+```
+namedtuple('Point2D', ['x', 'y']) namedtuple('Point2D', ('x', 'y'))
+namedtuple('Point2D', 'x, y')
+namedtuple('Point2D', 'x y')
+```
+
+Since named tuples are also regular tuples, we can still handle them just like any other tuple
+
+- by index
+- slice
+- iterate
+
+```
+Point2D = namedtuple('Point2D', 'x y')
+pt1 = Point2D(10, 20)
+x, y = pt1
+x = pt1[0]
+
+for e in pt1:
+	print(e)
+
+pt1.x # -> 10
+pt1.y # -> 20
+
+pt1._asdict() # -> {'x': 10, 'y': 20}
+```
+
+Since `pt1` *is a tuple* it is immutable:
+`pt1.x = 100 # will not work!`
+
+### Modifying a Named Tuple
+
+Named tuples have a very handy instance method `_replace`
+
+```
+Stock = namedtuple('Stock', 'symbol year month day open high low close')
+
+djia = Stock('DJIA', 2018, 1, 25, 26_313, 26_458, 26_260, 26_393)
+
+djia = djia._replace(day=26, high=26_459, close=26_394)
+```
+
+*Note that the memory address of `djia` has now changed*
+
+### Extending a Named Tuple
+
+```
+Point2D = namedtuple('Point2D', 'x y')
+Point3D = namedtuple('Point3D', Point2D._fields + (z',)
+```
