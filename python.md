@@ -20,19 +20,19 @@ In python by implementing gettes and setters you don't break backward compatabil
 
 ```
 class Line:
-	def __init__(self, length):
-		# Setter usage for validation purposes
-		self.length = length
+    def __init__(self, length):
+        # Setter usage for validation purposes
+        self.length = length
 
-	@property
-	def length(self):
-		return self._length
+    @property
+    def length(self):
+        return self._length
 
-	@length.setter
-	def length(self, length):
-		if length < 0:
-			raise ValueError('Length must be positive.')
-		self._length = length
+    @length.setter
+    def length(self, length):
+        if length < 0:
+            raise ValueError('Length must be positive.')
+        self._length = length
 ```
 
 ## Lambdas
@@ -42,11 +42,10 @@ class Line:
 ## Python do-while emulation
 
 ```
-i = 0
 while True:
-	name = input('Print your name: ')
-	if is_correct(name):
-		break
+    name = input('Print your name: ')
+    if is_correct(name):
+        break
 print(f'Hello, {name}')
 ```
 
@@ -60,30 +59,31 @@ l = [1, 2, 3]
 idx = 0
 
 while idx < len(l):
-	if l[idx] == val:
-		print('Value in list')
-		break
-	idx += 1
+    if l[idx] == val:
+        print('Value in list')
+        break
+    idx += 1
 else:
-	print('Value not in list')
+    print('Value not in list')
 ```
 
 ### For:
 
 ```
 for i in range(1, 8):
-	print(i)
-	if i % 7 == 0:
-		print('Multiple of 7 found')
+    print(i)
+    if i % 7 == 0:
+        print('Multiple of 7 found')
+        break
 else:
-	print('Multiple of 7 not found')
+    print('Multiple of 7 not found')
 ```
 
 ## For-loop unpacking
 
 ```
 for i, j in [(1, 2), (3, 4), (5, 6)]:
-	print(i, j)
+    print(i, j)
 ```
 ### Result
 
@@ -99,8 +99,8 @@ Swapping values:
 
 `a, b = b, a`
 
-`a, b, c = [1, 2, 'Hello']` -> a = 10, b = 20, c = 'hello'
-`a, b, c = 'XYZ'` -> a = 'X', b = 'Y', c = 'Z'
+`a, b, c = [1, 2, 'Hello'] # a = 1, b = 2, c = 'Hello'`
+`a, b, c = 'XYZ' # a = 'X', b = 'Y', c = 'Z'`
 
 ### The `*` unpacking operator
 
@@ -127,8 +127,8 @@ l = [*l1, *l2] # l = [1, 2, 3, 'X', 'Y', 'Z']
 d1 = {'p': 1, 'y': 2, 't': 3}
 d2 = {'t': 4, 'h': 5, 'o': 6, 'n': 7}
 
-l = [*d1, *d2] #['p', 'y', 't', 't', 'h', 'o', 'n'] order is not guaranteed 
-s = {*d1, *d2} #{'p', 'y', 't', 'h', 'o', 'n'} order is not guaranteed
+l = [*d1, *d2] # ['p', 'y', 't', 't', 'h', 'o', 'n'] order is not guaranteed 
+s = {*d1, *d2} # {'p', 'y', 't', 'h', 'o', 'n'} order is not guaranteed
 ```
 
 ### The `**` unpacking operator
@@ -139,10 +139,10 @@ Unpacking key-value pairs
 d1 = {'p': 1, 'y': 2, 't': 3}
 d2 = {'t': 4, 'h': 5, 'o': 6, 'n': 7}
 
-d = {**d1, **d2} #{'p': 1, 'y': 2, 't': 4, 'h': 5, 'o': 6, 'n': 7} order is not guaranteed
+d = {**d1, **d2} # {'p': 1, 'y': 2, 't': 4, 'h': 5, 'o': 6, 'n': 7} order is not guaranteed
 ```
 
-Note that the value of 't' in d2 "overwrote" the first value of 't' found in d1
+Note that the value of `t` in `d2` "overwrote" the first value of `t` found in `d1`
 
 ### Nested Unpacking
 
@@ -157,12 +157,12 @@ a, b, (c, d) = l
 ```
 a, *b, (c, d, e) = [1, 2, 3, 'XYZ']
 
-# a = 1, b = [2, 3], (c, d, e) = 'XYZ' -> c = 'X', d = 'Y', e = 'Z'
+# a = 1, b = [2, 3], c = 'X', d = 'Y', e = 'Z'
 ```
 
 ```
 a, *b, (c, *d) = [1, 2, 3, 'python']
-# a = 1, b = [2, 3], (c, *d) = 'python' -> c = 'p', d = ['y', 't', 'h', 'o', 'n']
+# a = 1, b = [2, 3], c = 'p', d = ['y', 't', 'h', 'o', 'n']
 ```
 
 
@@ -220,7 +220,7 @@ Mutable objects are not safe from unintended side-effects.
 
 ```
 def process(lst):
-	lst.append(100)
+    lst.append(100)
 
 my_list = [1, 2, 3]
 process(my_list)
@@ -288,7 +288,7 @@ As the Python code is compiled, **identifiers** are interned:
 
 ### Identifiers:
 - must start with - or a letter
-- can only contai letters, numbers and underscore
+- can only contain letters, numbers and underscore
 
 Python, both internally, and in the code you write, deals with lots and lots of dictionary type lookups, on string keys, which means a lot of string equality testing.
 
@@ -344,7 +344,7 @@ Integer in python uses a variable number of bits. Can use 4 bytes (32 bits), 8 b
 - `//` is called **floor** division
 - `%` is called the **modulo** operator
 
-And they alwahy satisfy: `n == d * (n // d) + (n % d)`
+And they always satisfy: `n == d * (n // d) + (n % d)`
 
 ### Floor
 
@@ -395,9 +395,9 @@ hex(10) # 0xa
 The prefixes in the strings help document the base of the number.
 
 ```
-a = 0b1010 # a -> 10
-a = 0o12 # a -> 10
-a = 0xA # a -> 10
+a = 0b1010 # a == 10
+a = 0o12 # a == 10
+a = 0xA # a == 10
 ```
 
 #### Other bases: base change algorithm
@@ -407,14 +407,14 @@ a = 0xA # a -> 10
 
 ```
 if n == 0:
-	return [0]
+    return [0]
 
 digits = []
 
 while n > 0:
-	m = n % b
-	n = n // b
-	digits.insert(0, m)
+    m = n % b
+    n = n // b
+    digits.insert(0, m)
 ```
 
 This algorithm returns a list of the digits in the specified base b (a representation of n10 in base b) Usually we want to return an encoded number where digits higher than 9 use letters such as A..Z We simply need to decide what character to use for the various digits in the base.
@@ -796,6 +796,11 @@ There is always a possibility to avoid multiple if checks by getting _truthy_ ar
 
 #### And
 
+`a = s1 and s2 and s3 and 'default'`
+
+`a` is equal to the first _falsy_ value from left to right. This also shows ability to have default value in any bool equasion.
+
+
 ##### Zero division
 
 `x = a and total / a`
@@ -831,7 +836,7 @@ Something similar happens when positional arguments are passed to a function:
 
 ```
 def func1(a, b, *c):
-	pass
+    pass
 
 func1(10, 20, 'a', 'b') # a = 10, b = 20, c = ('a', 'b')
 ```
@@ -840,10 +845,11 @@ func1(10, 20, 'a', 'b') # a = 10, b = 20, c = ('a', 'b')
 
 ```
 def func1(a, b, c):
-	pass
+    pass
+
 l = [10, 20, 30]
 
-func1(l) $ throws exception
+func1(l) # throws exception
 
 func(*l) # a = 10, b = 20, c = 30
 ```
@@ -852,7 +858,7 @@ func(*l) # a = 10, b = 20, c = 30
 
 ```
 def func(a, b, *args, d):
-	pass
+    pass
 ```
 
 In this case, `*args` effectively exhausts all positional arguments
@@ -862,7 +868,9 @@ In fact we can force no positional arguments at all:
 
 ```
 def func(*, d):
-	pass
+    pass
+
+func(d=5)
 ```
 
 `*` indicates the "end" of positional arguments
@@ -871,7 +879,7 @@ def func(*, d):
 
 ```
 def func(*, d, **kwargs):
-	pass
+    pass
 
 func(d=1, a=2, b=3) # d = 1, kwargs = {'a': 2, 'b': 3}
 
@@ -898,11 +906,11 @@ When a module is loaded all code is executed immediately
 
 ```
 def func(a=10):
-	print(a) 
+    print(a) 
 func()
 ```
 - `def func(a=10):` the function object is created, and func references it
-- `print(a)` the integer object 10 is evaluated/created and is assigned as the default for a
+- `print(a)` the integer object 10 is evaluated/created and is assigned as the default for `a`
 - `func()` the function is executed
 
 ### So what?
@@ -955,12 +963,12 @@ Docstrings are stored in the `__doc__` property.
 help(fact)
 
 # Output:
-#	 fact(n)
-#		 Calculates n! (factorial function)
-#		 Inputs:
-#			n: non-negative integer
-#		 Returns:
-#			the factorial of n
+#     fact(n)
+#         Calculates n! (factorial function)
+#         Inputs:
+#            n: non-negative integer
+#         Returns:
+#            the factorial of n
 ```
 
 ### Function Annotations
@@ -969,24 +977,24 @@ Additional documenting way, stored in __annotations__ property as dictionary.
 
 ```
 def my_func(a: <expression>, b: <expression>) -> <expression>:
-	pass
+    pass
 ```
 
 ```
 def my_func(a: 'a string', b: 'a positive integer') -> 'a string':
-	return a * b
+    return a * b
 
 help(my_func) 
 
 # Output:
-	# my_func(a: 'a string', b: 'a positive integer') -> 'a string'
+    # my_func(a: 'a string', b: 'a positive integer') -> 'a string'
 ```
 
 Annotations can be any expression
 
 ```
 def my_func(a: str, b: [1, 2, 3]) -> str:
-	return a*b
+    return a*b
 ```
 
 ## Lambda Expressions
@@ -994,14 +1002,14 @@ def my_func(a: str, b: [1, 2, 3]) -> str:
 Actually are usual functions but without name
 
 ```
-lambda x: return x ** 2
+lambda x: x ** 2
 lambda x, y: x + y
 lambda : 'hello'
 lambda s: s[::-1].upper()
 ```
 
 ```
-lambda s: s[::-1].upper() # function
+lambda s: s[::-1].upper()
 ```
 
 Lambda is NOT equvalent to closure.
@@ -1154,9 +1162,9 @@ list(filter(lambda n: n % 2 == 0, l)) # [0, 2, 4]
 
 ```
 zip(
-	[1, 2, 3],
-	[10, 20, 30],
-	['a', 'b', 'c']
+    [1, 2, 3],
+    [10, 20, 30],
+    ['a', 'b', 'c']
 )
 
 # (1, 10, 'a'), (2, 20, 'b'), (3, 30, 'c')
@@ -1177,10 +1185,6 @@ list(zip(l1, l2))
 
 `[x for x in l if x % 2 == 0]`
 
-```
-l1 = [1, 2, 3]
-l2 = [10, 20, 30]
-```
 
 ## Reducing functions
 
@@ -1260,12 +1264,11 @@ The reduce function has a third (optional) parameter: `initializer`. If it is sp
 ```
 l = []
 
-reduce(lambda x, y: x + y, l) # exception
-reduce(lambda x, y: x + y, l, 1) # 1
+reduce(lambda x, y: x + y, l) # empty sequence exception
+reduce(lambda x, y: x + y, l, 1) # 1 returned
 
 l = [1, 2, 3]
-reduce(lambda x, y: x + y, l, 100) # 106
-
+reduce(lambda x, y: x + y, l, 100) # 106 returned
 ```
 
 ## Partial functions
@@ -1286,6 +1289,10 @@ f(20, 30) # 10, 20, 30
 ### Better way
 ```
 from functools import partial
+
+def my_func(a, b, c):
+   print(a, b, c)
+
 f = partial(my_func, 10) 
 
 f(20, 30) # 10, 20, 30
@@ -1348,6 +1355,8 @@ The `itemgetter` function returns a callable
 `itemgetter(i)` returns a callable which takes one parameter: a sequence object
 
 ```
+from operator import itemgetter
+
 f = itemgetter(1, 3)
 
 f([1, 2, 3, 4]) # (2, 4)
@@ -1397,7 +1406,7 @@ Scopes include each other from top to bottom:
 
 a = 10
 def func() {
-	print(a)
+    print(a)
 }
 ```
 
@@ -1417,7 +1426,7 @@ Variables defined inside a function are not created until the function is **call
 a = 0
 
 def my_func():
-	a = 100
+    a = 100
 
 my_func() # 100
 print(a) # 0
@@ -1443,9 +1452,9 @@ When Python encounters a function definition at **compile-time** it will **scan*
 
 ```
 def outer_func():
-   	# some code
-	def inner_func():
- 		# some code
+       # some code
+    def inner_func():
+         # some code
    inner_func()
 
 outer_func()
@@ -1460,8 +1469,8 @@ def outer_func():
    x = 'hello'
    def inner_func():
        x = 'python'
-	inner_func()
-	print(x)
+    inner_func()
+    print(x)
 
 outer_func()
 ```
@@ -1472,8 +1481,8 @@ def outer_func():
    def inner_func():
        nonlocal x
        x = 'python'
-   	inner_func()
-	print(x)
+       inner_func()
+    print(x)
 
 outer_func()
 ```
@@ -1523,8 +1532,8 @@ def outer():
     a = 100
     x = 'python'
     def inner():
-		a = 10 # local variable
-		print("{0} rocks!".format(x)) return inner
+        a = 10 # local variable
+        print("{0} rocks!".format(x)) return inner
 
 fn = outer()
 
@@ -1534,7 +1543,7 @@ fn.__closure__ # (<cell at 0xA500: str object at 0xFF100>, )
 
 ```
 def outer():
-	x = 'python'
+    x = 'python'
     print(hex(id(x)) # 0xFF100
     def inner():
        print(hex(id(x)) # 0xFF100
@@ -1550,12 +1559,12 @@ Every time we run a function, a new scope is created. If that function generates
 
 ```
 def counter():
-	closure count = 0
-	def inc():
-		nonlocal count
-		count += 1 
-		return count
-	return inc
+    closure count = 0
+    def inc():
+        nonlocal count
+        count += 1 
+        return count
+    return inc
 
 f1 = counter()
 f2 = counter()
@@ -1575,10 +1584,10 @@ def outer():
        nonlocal count
        count += 1
        return count
-	def inc2():
-		nonlocal count
-		count += 1
-		return count
+    def inc2():
+        nonlocal count
+        count += 1
+        return count
    return inc1, inc2
 
 f1, f2 = outer()
@@ -1592,19 +1601,19 @@ f2() # 2
 def counter(fn):
    count = 0
    def inner(*args, **kwargs):
-		nonlocal count
-		count += 1
-		print('Function {0} was called {1} times'.format(fn.__name__, count) return fn(*args, **kwargs)
+        nonlocal count
+        count += 1
+        print('Function {0} was called {1} times'.format(fn.__name__, count) return fn(*args, **kwargs)
     return inner
 
 def add(a, b=0):
-	return a + b
+    return a + b
 ```
 
 ```
 @counter
 def add(a, b):
-	return a + b
+    return a + b
 ```
 
 is the same as writing
@@ -1632,14 +1641,14 @@ In fact, the `wraps` function is itself a decorator but it needs to know what wa
 from functools import wraps
 
 def counter(fn):
-	count = 0
-	@wraps(fn)
-	def inner(*args, **kwargs):
-		nonlocal count
-		count += 1
-		print(count)
-       	return fn(*args, **kwargs)
-   	return inner
+    count = 0
+    @wraps(fn)
+    def inner(*args, **kwargs):
+        nonlocal count
+        count += 1
+        print(count)
+           return fn(*args, **kwargs)
+       return inner
 ```
 
 ### Decorator Factories
@@ -1655,10 +1664,10 @@ def timed(n):
     def inner(*args, **kwargs):
         total_elapsed = 0
         for i in range(n):
-			start = perf_counter()
-			result = fn(*args, **kwargs)
-			total_elapsed += (perf_counter() - start)
-		avg_elapsed = total_elapsed / n
+            start = perf_counter()
+            result = fn(*args, **kwargs)
+            total_elapsed += (perf_counter() - start)
+        avg_elapsed = total_elapsed / n
         print(avg_elapsed)
         return result
 
@@ -1669,7 +1678,7 @@ return dec
 ```
 @timed(10)
 def my_func():
-	...
+    ...
 ```
 
 ## Tuples as data structures
@@ -1748,7 +1757,7 @@ x, y = pt1
 x = pt1[0]
 
 for e in pt1:
-	print(e)
+    print(e)
 
 pt1.x # -> 10
 pt1.y # -> 20
@@ -1779,3 +1788,78 @@ djia = djia._replace(day=26, high=26_459, close=26_394)
 Point2D = namedtuple('Point2D', 'x y')
 Point3D = namedtuple('Point3D', Point2D._fields + (z',)
 ```
+
+### DocStrings and Default Values
+
+#### DocStrings
+```
+Point2D = namedtuple('Point2D', 'x y')
+Point2D.__doc__ = 'Represents a 2D Cartesian coordinate.'
+Point2D.x.__doc__ = 'x coordinate'
+Point2D.y.__doc__ = 'y coordinate'
+```
+
+#### Default Values
+
+- Using a Prototype
+```
+Vector2D = namedtuple('Vector2D', 'x1 y1 x2 y2 origin_x origin_y')
+vector_zero = Vector2D(0, 0, 0, 0, 0, 0)
+# To construct a new instance of Vector2D we now use vector_zero._replace instead
+
+v1 = vector_zero._replace(x1=10, y1=10, x2=20, y2=20)
+```
+
+- Using `__defaults__`
+
+```
+Vector2D = namedtuple('Vector2D', 'x1 y1 x2 y2 origin_x origin_y')
+Vector2D.__new__.__defaults__ = (0, 0)
+
+v1 = Vector2D(10, 10, 20, 20)
+v1 # -> Vector2D(x1=10, y1=10, x2=20, y2=20, origin_x=0, origin_y=0)
+```
+
+*Named Tuples are really usefull when it comes to returning multiple values, since code editor can hint.*
+
+## What is a Module?
+
+`globals()` gives listing of current global namespaces
+
+`locals()` gives listing of current local namespaces
+
+```
+import sys
+sys.modules # returns a dict with all imported modules
+sys.__dict__ # return dict of namespaces
+sys.path # returns places where python looks for modules
+
+# e.g.
+import math as r_math
+
+'math' in sys.modules # True
+'math' in globals() # False
+'r_math' in globals() # True
+```
+
+```
+import importlib
+
+# the same as import math as math2
+math2 = importlib.import_module('math') # import module by string
+```
+
+### Commonality
+`from math import whatever`
+
+**In all cases the `math` module is loaded into memory. Statements affects only what names are placed into namespace.**
+
+### What python do when importing a module?
+- Checks `sys.modules` cache to see if a module has been already imported. If so it uses reference from there, otherwise:
+- Creates a new model object `types.ModuleType`
+- Loads the source code from file
+- Adds an entry to `sys.modules` with name as key 
+- Compiles and executes the source code
+
+## Extra
+`python -i script.py # runs script in interactive mode`
