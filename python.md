@@ -1495,10 +1495,10 @@ Whenever Python is told that a variable is `nonlocal` it will look for it in the
 
 ```
 def outer():
-x = 'python'
-   def inner():
-       print("{0} rocks!".format(x))
-   return inner
+    x = 'python'
+    def inner():
+        print("{0} rocks!".format(x))
+    return inner
 
 fn = outer()
 
