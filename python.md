@@ -6,7 +6,7 @@
 
 `_my_var` - single underscore. This is a convention to indicate "internal use" or "private" objects. Objects named this way will not get imported by a statement such as: `from module import *`.
 
-`__my_var` - double underscore. Used to "mangle" class attributes – useful in inheritance chains. Will be able from unside as `_{class_name}__my_var`.
+`__my_var` - double underscore. Used to "mangle" class attributes – useful in inheritance chains. Will be available from inside as `_{class_name}__my_var`.
 
 `__my_var__` - double double underscore. Used for system-defined names that have a special meaning to the interpreter. Name mangling is intended to give classes an easy way to define “private” instance variables and methods, without having to worry about instance variables defined by derived classes, or mucking with instance variables by code outside the class. Note that the mangling rules are designed mostly to avoid accidents; it still is possible for a determined soul to access or modify a variable that is considered private.
 
@@ -365,10 +365,10 @@ The int class provides multiple constructors
 int(10)
 int(-10)
 int(10.9) # truncation: 10
-int(-10.9) # truncation: 10.9
+int(-10.9) # truncation: -10
 int(True) # 1
 int(Decimal('10.9')) # truncation: 10
-int('10') # a == 10
+int('10') # 10
 ```
 #### Number base
 
@@ -387,9 +387,9 @@ int('B', 11) # ValueError: invalid literal for int() with base 11: 'B'
 built-in functions
 
 ```
-bin(10) # '0b1010'
-oct(10) # '0o12'
-hex(10) # 0xa
+bin(10) # '0b1010' 2
+oct(10) # '0o12' 8
+hex(10) # '0xa' 16
 ```
 
 The prefixes in the strings help document the base of the number.
@@ -417,7 +417,7 @@ while n > 0:
     digits.insert(0, m)
 ```
 
-This algorithm returns a list of the digits in the specified base b (a representation of n10 in base b) Usually we want to return an encoded number where digits higher than 9 use letters such as A..Z We simply need to decide what character to use for the various digits in the base.
+This algorithm returns a list of the digits in the specified base b (a representation of n10 in base b). Usually we want to return an encoded number where digits higher than 9 use letters such as A..Z. We simply need to decide what character to use for the various digits in the base.
 
 ##### Encoding
 
@@ -438,8 +438,8 @@ y = Fraction(22, 7)
 z = Fraction(6, 10)
 ```
 
-- Fraction are automatically reduced: `Fraction(6, 10) # Fraction(3, 5)`
-- Negative sign, if any, is always attached to the numerator: `Fraction(1, -4) # Fraction(-1, 4)`
+- Fraction are automatically reduced: `Fraction(6, 10) # converts to Fraction(3, 5)`
+- Negative sign, if any, is always attached to the numerator: `Fraction(1, -4) # converts to Fraction(-1, 4)`
 
 ### Constructors
 
@@ -478,6 +478,7 @@ significant digits -> 52 bits -> 15-17 significant digits
 ### Representation: binary
 
 Numbers in a computer are represented using bits, not decimal digits so instead of powers of 10 we use powers of 2.
+https://www.keil.com/support/man/docs/c51/c51_ap_floatingpt.htm
 
 E.g. 28.0 float is stored as follows:
 
@@ -584,14 +585,14 @@ math.ceil(-10.6) # -10
 `round(x, n=0)` - round to the closest value, with `n` precision
 
 ```
-round(x) -> int
-round(x, n) -> same type as x
-round(x, 0) -> same type as x
+round(3.123) # 3
+round(3.78, 1) #3.8
+round(3.5, 4)
 ```
 
 #### Important stuff
 - `n` can be negative: `round(18.2, -1) == 20`
-- if there is no closest precision `round` uses _banker's rounding_
+- if there is no closest precision, `round` uses _banker's rounding_
 ```
 round(1.25, 1) -> 1.2 towards 0
 round(1.35, 1) -> 1.4 away from 0
@@ -694,8 +695,8 @@ from decimal import Decimal
 
 decimal.getcontext().prec = 2
 
-a = Decimal('0.12345') a -> 0.12345
-b = Decimal('0.12345') b -> 0.12345
+a = Decimal('0.12345') # a -> 0.12345
+b = Decimal('0.12345') # b -> 0.12345
 c = a + b # a + b = 0.2469 c -> 0.25
 ```
 
@@ -890,7 +891,7 @@ func(d=1) # d = 1, kwargs = {}
 
 Arguments:
 
-- `a, b, c=10` - positional parameters can have default values non-defaulted params are mandatory args user may specify them using keywords
+- `a, b, c=10` - positional parameters can't have default values, non-defaulted params are mandatory, user may specify them using keywords
 - `*args` - scoops up any additional positional args
 - `*` - indicates no more positional args
 - `kw1, kw2=100` - specific keyword-only args can have default values non-defaulted params are mandatory args user must specify them using keywords
@@ -909,7 +910,7 @@ def func(a=10):
     print(a) 
 func()
 ```
-- `def func(a=10):` the function object is created, and func references it
+- `def func(a=10):` the function object is created and func references it
 - `print(a)` the integer object 10 is evaluated/created and is assigned as the default for `a`
 - `func()` the function is executed
 
@@ -1227,8 +1228,8 @@ In fact we could write
 def _reduce(fn, sequence):
    result = sequence[0]
    for x in sequence[1:]:
-
-result = fn(result, x) return result
+       result = fn(result, x)
+   return result
 ```
 
 ```
@@ -1255,7 +1256,7 @@ reduce(lambda a, b: a + b, l) # sum 38
 - `max`
 - `sum`
 - `any` - True if any item is True
-- `all` - True if all items is True
+- `all` - True if all items are True
 
 #### The `reduce` initializer
 
@@ -1352,15 +1353,13 @@ The `itemgetter` function returns a callable
 
 `getitem(s, i)` takes two parameters, and returns a value: `s[i]`
 
-`itemgetter(i)` returns a callable which takes one parameter: a sequence object
+`itemgetter(i)` returns a callable which takes one parameter
 
 ```
 from operator import itemgetter
 
 f = itemgetter(1, 3)
-
 f([1, 2, 3, 4]) # (2, 4)
-
 f('python') # ('y', 'h')
 ```
 
@@ -1455,7 +1454,7 @@ def outer_func():
        # some code
     def inner_func():
          # some code
-   inner_func()
+    inner_func()
 
 outer_func()
 ```
@@ -1469,8 +1468,8 @@ def outer_func():
    x = 'hello'
    def inner_func():
        x = 'python'
-    inner_func()
-    print(x)
+   inner_func()
+   print(x)
 
 outer_func()
 ```
@@ -1511,9 +1510,9 @@ When we called `fn` at that time Python determined the value of `x` in the exten
 
 ```
 def outer():
-x = 'python'
-   def inner():
-       print(x)
+    x = 'python'
+    def inner():
+        print(x)
 return inner
 ```
 
@@ -1523,9 +1522,9 @@ In the code above the value of x is shared between two scopes:
 
 ### Python Cells and Multi-Scoped Variables
 
-The label x is in two different scopes but always reference the same "value". `x` in this case called **a free variable**.
+The label `x` is in two different scopes but always reference the same "value". `x` in this case called **a free variable**.
 
-Python does this by creating a **cell** as an intermediary object. Both variables `outer.x` and `inner.x` reference to **cell* and **cell** reference to the actual value.
+Python does this by creating a **cell** as an intermediary object. Both variables `outer.x` and `inner.x` reference to **cell** and **cell** reference to the actual value.
 
 ```
 def outer():
@@ -1559,7 +1558,7 @@ Every time we run a function, a new scope is created. If that function generates
 
 ```
 def counter():
-    closure count = 0
+    count = 0
     def inc():
         nonlocal count
         count += 1 
@@ -1629,7 +1628,7 @@ result == 3 # True
 
 `add.__name__ # inner`
 
-`mult`'s name "changed" when we decorated it they are not the same function after all. We also lost all metadata.
+`add`'s name "changed" when we decorated it, they are not the same function after all. We also lost all metadata.
 
 ### The `functools.wraps` function
 
@@ -1739,7 +1738,8 @@ pt = Point2D(10, 20)
 
 Ways of providing the list of field names to the namedtuple function:
 ```
-namedtuple('Point2D', ['x', 'y']) namedtuple('Point2D', ('x', 'y'))
+namedtuple('Point2D', ['x', 'y'])
+namedtuple('Point2D', ('x', 'y'))
 namedtuple('Point2D', 'x, y')
 namedtuple('Point2D', 'x y')
 ```
